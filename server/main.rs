@@ -1,12 +1,10 @@
-use hello_world::{
+use compiled_protos::hello_world::{
     hello_world_server::{HelloWorld, HelloWorldServer},
-    DemoList,
+    DemoList, HelloWorldRequest, HelloWorldResponse,
 };
 use tonic::{transport::Server, Request, Response, Status};
 
-mod hello_world {
-    tonic::include_proto!("hello_world");
-}
+mod compiled_protos;
 
 struct HelloWorldService;
 
@@ -14,12 +12,12 @@ struct HelloWorldService;
 impl HelloWorld for HelloWorldService {
     async fn hello_world(
         &self,
-        request: Request<hello_world::HelloWorldRequest>,
-    ) -> Result<Response<hello_world::HelloWorldResponse>, Status> {
+        request: Request<HelloWorldRequest>,
+    ) -> Result<Response<HelloWorldResponse>, Status> {
         let req: &str = request.get_ref().hello_string.as_ref();
         let hello = if req.is_empty() { "hello" } else { req };
         let returned = format!("{} world!", hello);
-        Ok(Response::new(hello_world::HelloWorldResponse {
+        Ok(Response::new(HelloWorldResponse {
             hello_world_string: returned,
         }))
     }
