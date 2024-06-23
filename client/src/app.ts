@@ -25,6 +25,8 @@ async function main() {
   const client: HelloWorldClient = createClient(HelloWorldDefinition, channel);
   const resp = await client.helloWorld({ helloString: 'hi' });
   console.log(resp);
+  const resp2 = await client.echoList({ demoStr: ['a', 'b', 'c'] });
+  console.log(resp2);
 }
 
 main();

@@ -10,30 +10,34 @@ import _m0 from "protobufjs/minimal.js";
 
 export const protobufPackage = "hello_world";
 
-export interface Request {
+export interface HelloWorldRequest {
   helloString: string;
 }
 
-export interface Response {
+export interface HelloWorldResponse {
   helloWorldString: string;
 }
 
-function createBaseRequest(): Request {
+export interface DemoList {
+  demoStr: string[];
+}
+
+function createBaseHelloWorldRequest(): HelloWorldRequest {
   return { helloString: "" };
 }
 
-export const Request = {
-  encode(message: Request, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const HelloWorldRequest = {
+  encode(message: HelloWorldRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.helloString !== "") {
       writer.uint32(10).string(message.helloString);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Request {
+  decode(input: _m0.Reader | Uint8Array, length?: number): HelloWorldRequest {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequest();
+    const message = createBaseHelloWorldRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -53,11 +57,11 @@ export const Request = {
     return message;
   },
 
-  fromJSON(object: any): Request {
+  fromJSON(object: any): HelloWorldRequest {
     return { helloString: isSet(object.helloString) ? globalThis.String(object.helloString) : "" };
   },
 
-  toJSON(message: Request): unknown {
+  toJSON(message: HelloWorldRequest): unknown {
     const obj: any = {};
     if (message.helloString !== "") {
       obj.helloString = message.helloString;
@@ -65,32 +69,32 @@ export const Request = {
     return obj;
   },
 
-  create(base?: DeepPartial<Request>): Request {
-    return Request.fromPartial(base ?? {});
+  create(base?: DeepPartial<HelloWorldRequest>): HelloWorldRequest {
+    return HelloWorldRequest.fromPartial(base ?? {});
   },
-  fromPartial(object: DeepPartial<Request>): Request {
-    const message = createBaseRequest();
+  fromPartial(object: DeepPartial<HelloWorldRequest>): HelloWorldRequest {
+    const message = createBaseHelloWorldRequest();
     message.helloString = object.helloString ?? "";
     return message;
   },
 };
 
-function createBaseResponse(): Response {
+function createBaseHelloWorldResponse(): HelloWorldResponse {
   return { helloWorldString: "" };
 }
 
-export const Response = {
-  encode(message: Response, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const HelloWorldResponse = {
+  encode(message: HelloWorldResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.helloWorldString !== "") {
       writer.uint32(10).string(message.helloWorldString);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Response {
+  decode(input: _m0.Reader | Uint8Array, length?: number): HelloWorldResponse {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseResponse();
+    const message = createBaseHelloWorldResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -110,11 +114,11 @@ export const Response = {
     return message;
   },
 
-  fromJSON(object: any): Response {
+  fromJSON(object: any): HelloWorldResponse {
     return { helloWorldString: isSet(object.helloWorldString) ? globalThis.String(object.helloWorldString) : "" };
   },
 
-  toJSON(message: Response): unknown {
+  toJSON(message: HelloWorldResponse): unknown {
     const obj: any = {};
     if (message.helloWorldString !== "") {
       obj.helloWorldString = message.helloWorldString;
@@ -122,12 +126,71 @@ export const Response = {
     return obj;
   },
 
-  create(base?: DeepPartial<Response>): Response {
-    return Response.fromPartial(base ?? {});
+  create(base?: DeepPartial<HelloWorldResponse>): HelloWorldResponse {
+    return HelloWorldResponse.fromPartial(base ?? {});
   },
-  fromPartial(object: DeepPartial<Response>): Response {
-    const message = createBaseResponse();
+  fromPartial(object: DeepPartial<HelloWorldResponse>): HelloWorldResponse {
+    const message = createBaseHelloWorldResponse();
     message.helloWorldString = object.helloWorldString ?? "";
+    return message;
+  },
+};
+
+function createBaseDemoList(): DemoList {
+  return { demoStr: [] };
+}
+
+export const DemoList = {
+  encode(message: DemoList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.demoStr) {
+      writer.uint32(10).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): DemoList {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDemoList();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.demoStr.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DemoList {
+    return {
+      demoStr: globalThis.Array.isArray(object?.demoStr) ? object.demoStr.map((e: any) => globalThis.String(e)) : [],
+    };
+  },
+
+  toJSON(message: DemoList): unknown {
+    const obj: any = {};
+    if (message.demoStr?.length) {
+      obj.demoStr = message.demoStr;
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<DemoList>): DemoList {
+    return DemoList.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<DemoList>): DemoList {
+    const message = createBaseDemoList();
+    message.demoStr = object.demoStr?.map((e) => e) || [];
     return message;
   },
 };
@@ -139,9 +202,17 @@ export const HelloWorldDefinition = {
   methods: {
     helloWorld: {
       name: "HelloWorld",
-      requestType: Request,
+      requestType: HelloWorldRequest,
       requestStream: false,
-      responseType: Response,
+      responseType: HelloWorldResponse,
+      responseStream: false,
+      options: {},
+    },
+    echoList: {
+      name: "EchoList",
+      requestType: DemoList,
+      requestStream: false,
+      responseType: DemoList,
       responseStream: false,
       options: {},
     },
@@ -149,11 +220,19 @@ export const HelloWorldDefinition = {
 } as const;
 
 export interface HelloWorldServiceImplementation<CallContextExt = {}> {
-  helloWorld(request: Request, context: CallContext & CallContextExt): Promise<DeepPartial<Response>>;
+  helloWorld(
+    request: HelloWorldRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<HelloWorldResponse>>;
+  echoList(request: DemoList, context: CallContext & CallContextExt): Promise<DeepPartial<DemoList>>;
 }
 
 export interface HelloWorldClient<CallOptionsExt = {}> {
-  helloWorld(request: DeepPartial<Request>, options?: CallOptions & CallOptionsExt): Promise<Response>;
+  helloWorld(
+    request: DeepPartial<HelloWorldRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<HelloWorldResponse>;
+  echoList(request: DeepPartial<DemoList>, options?: CallOptions & CallOptionsExt): Promise<DemoList>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

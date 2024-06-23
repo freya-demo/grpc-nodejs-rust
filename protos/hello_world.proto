@@ -3,13 +3,18 @@ syntax = "proto3";
 package hello_world;
 
 service HelloWorld {
-    rpc HelloWorld (Request) returns (Response);
+    rpc HelloWorld (HelloWorldRequest) returns (HelloWorldResponse);
+    rpc EchoList (DemoList) returns (DemoList);
 }
 
-message Request {
+message HelloWorldRequest {
     string hello_string = 1;
 }
 
-message Response {
+message HelloWorldResponse {
     string hello_world_string = 1;
+}
+
+message DemoList {
+    repeated string demo_str = 1;
 }
