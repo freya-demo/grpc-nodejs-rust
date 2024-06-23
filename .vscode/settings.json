@@ -1,0 +1,9 @@
+{
+    "cSpell.words": [
+        "proto",
+        "protos"
+    ],
+    "rust-analyzer.runnables.extraEnv": {
+        "RUST_LOG": "debug"
+    }
+}
