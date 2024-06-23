@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "pretty": true,
     "resolveJsonModule": true,
     "sourceMap": true,
@@ -9,8 +9,9 @@
     "outDir": "./dist",
     "baseUrl": "./src",
     "experimentalDecorators": true,
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/app.ts", "scripts/generate-types.ts"],
   "exclude": ["node_modules", "src/**/*.spec.ts"]
 }
