@@ -56,7 +56,13 @@ async function main() {
     const resp1 = await counterClient.increase({ delta: 10 });
     const resp2 = await counterClient.increase({ delta: -2 });
     const current = await counterClient.current({});
-    console.log(resp1, resp2, current);
+
+    console.log(resp1, resp2);
+    console.log('current', current);
+
+    const listeners_count = await counterClient.getListenersCount({});
+    console.log('listeners count', listeners_count);
+
     exit();
   }
 }

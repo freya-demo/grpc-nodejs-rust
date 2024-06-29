@@ -3,6 +3,7 @@ use std::pin::Pin;
 use crate::{
     compiled_protos::counter::{
         single_counter_server::SingleCounter, CounterDelta, CounterDeltaWithId, CounterState,
+        ListenersCount,
     },
     utils::RactorTonicErrorExt,
 };
@@ -101,5 +102,14 @@ impl SingleCounter for SingleCounterService {
         });
 
         Ok(Response::new(Box::pin(rx)))
+    }
+
+    async fn get_listeners_count(
+        &self,
+        _request: Request<()>,
+    ) -> Result<Response<ListenersCount>, Status> {
+        Ok(Response::new(ListenersCount {
+            number: self.event_tx.receiver_count() as u32,
+        }))
     }
 }

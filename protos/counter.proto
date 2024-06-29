@@ -8,6 +8,7 @@ service SingleCounter {
     rpc Increase(CounterDelta) returns (CounterState);
     rpc Current(google.protobuf.Empty) returns (CounterState);
     rpc ListenDelta(google.protobuf.Empty) returns (stream CounterDeltaWithId);
+    rpc GetListenersCount(google.protobuf.Empty) returns (ListenersCount);
 }
 
 message CounterDelta {
@@ -21,4 +22,8 @@ message CounterDeltaWithId {
 
 message CounterState {
     int32 counter = 1;
+}
+
+message ListenersCount {
+    uint32 number = 1;
 }

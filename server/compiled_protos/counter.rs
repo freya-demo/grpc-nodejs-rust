@@ -19,6 +19,12 @@ pub struct CounterState {
     #[prost(int32, tag = "1")]
     pub counter: i32,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListenersCount {
+    #[prost(uint32, tag = "1")]
+    pub number: u32,
+}
 /// Generated client implementations.
 pub mod single_counter_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
@@ -173,6 +179,28 @@ pub mod single_counter_client {
                 .insert(GrpcMethod::new("counter.SingleCounter", "ListenDelta"));
             self.inner.server_streaming(req, path, codec).await
         }
+        pub async fn get_listeners_count(
+            &mut self,
+            request: impl tonic::IntoRequest<()>,
+        ) -> std::result::Result<tonic::Response<super::ListenersCount>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::new(
+                        tonic::Code::Unknown,
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/counter.SingleCounter/GetListenersCount",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("counter.SingleCounter", "GetListenersCount"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -203,6 +231,10 @@ pub mod single_counter_server {
             tonic::Response<Self::ListenDeltaStream>,
             tonic::Status,
         >;
+        async fn get_listeners_count(
+            &self,
+            request: tonic::Request<()>,
+        ) -> std::result::Result<tonic::Response<super::ListenersCount>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct SingleCounterServer<T: SingleCounter> {
@@ -408,6 +440,48 @@ pub mod single_counter_server {
                                 max_encoding_message_size,
                             );
                         let res = grpc.server_streaming(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/counter.SingleCounter/GetListenersCount" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetListenersCountSvc<T: SingleCounter>(pub Arc<T>);
+                    impl<T: SingleCounter> tonic::server::UnaryService<()>
+                    for GetListenersCountSvc<T> {
+                        type Response = super::ListenersCount;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(&mut self, request: tonic::Request<()>) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as SingleCounter>::get_listeners_count(&inner, request)
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let inner = inner.0;
+                        let method = GetListenersCountSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)
