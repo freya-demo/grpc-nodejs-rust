@@ -13,7 +13,7 @@ function main() {
       `--ts_proto_out=".\\compiled_protos"`,
       `--ts_proto_opt="outputServices=nice-grpc,outputServices=generic-definitions,useExactTypes=false,esModuleInterop=true,importSuffix=.js"`,
       `--proto_path="..\\protos"`,
-      `..\\protos\\hello_world.proto`,
+      `..\\protos\\*.proto`,
     ],
     {
       stdio: 'inherit',

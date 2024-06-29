@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package counter;
+
+service SingleCounter {
+    rpc increase(CounterIncreaseRequest) returns (CounterState);
+    rpc current(google.protobuf.Empty) returns (CounterState);
+}
+
+message CounterIncreaseRequest {
+    int32 delta = 1;
+}
+
+message CounterState {
+    int32 counter = 1;
+}
