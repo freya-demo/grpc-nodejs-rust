@@ -27,6 +27,7 @@ impl SingleCounterService {
 
 impl Drop for SingleCounterService {
     fn drop(&mut self) {
+        tracing::debug!("The single counter service is dropped.");
         self.0.stop(None);
     }
 }

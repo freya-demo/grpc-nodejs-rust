@@ -21,7 +21,9 @@ async fn main() {
     Server::builder()
         .add_service(hello_world_server)
         .add_service(single_counter_server)
-        .serve(addr)
+        .serve_with_shutdown(addr, async {
+            tokio::signal::ctrl_c().await.unwrap()
+        })
         .await
         .unwrap();
 }
