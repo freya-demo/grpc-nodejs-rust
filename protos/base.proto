@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package base;
+
+message Range {
+    uint32 start = 1;
+    optional uint32 end = 2;
+}

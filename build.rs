@@ -3,7 +3,11 @@ fn main() {
     tonic_build::configure()
         .out_dir("server/compiled_protos")
         .compile(
-            &["protos/hello_world.proto", "protos/counter.proto"],
+            &[
+                "protos/base.proto",
+                "protos/hello_world.proto",
+                "protos/counter.proto",
+            ],
             &["protos"],
         )
         .unwrap();

@@ -1,9 +1,12 @@
 use std::pin::Pin;
 
 use crate::{
-    compiled_protos::counter::{
-        single_counter_server::SingleCounter, CounterDelta, CounterDeltaWithId, CounterState,
-        ListenersCount,
+    compiled_protos::{
+        self,
+        counter::{
+            single_counter_server::SingleCounter, CounterDelta, CounterDeltaWithId, CounterState,
+            Deltas, ListenersCount,
+        },
     },
     utils::RactorTonicErrorExt,
 };
@@ -102,6 +105,19 @@ impl SingleCounter for SingleCounterService {
         });
 
         Ok(Response::new(Box::pin(rx)))
+    }
+
+    async fn get_deltas(
+        &self,
+        request: Request<compiled_protos::base::Range>,
+    ) -> Result<Response<Deltas>, Status> {
+        use actor::Message::GetDeltas;
+
+        let range = request.into_inner().into();
+
+        let deltas = ractor::call!(self.actor, GetDeltas, range).map_err_internal()?;
+
+        Ok(Response::new(Deltas { deltas }))
     }
 
     async fn get_listeners_count(

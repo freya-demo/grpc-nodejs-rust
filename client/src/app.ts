@@ -40,18 +40,27 @@ async function main() {
     console.log(resp1, resp2);
   }
 
+  const deltas = [];
   {
     const counterClient: SingleCounterClient = createClient(
       SingleCounterDefinition,
       channel,
     );
 
+    const deltas: number[] = [];
     (async () => {
       const stream = counterClient.listenDelta({});
       for await (const item of stream) {
+        deltas[item.id] = item.delta;
         console.log('delta from stream', item);
+        // console.log('deltas', deltas);
       }
     })();
+
+    const deltasResp = await counterClient.getDeltas({ start: 0 });
+    deltasResp.deltas.forEach((delta, index) => {
+      deltas[index] = delta;
+    });
 
     const resp1 = await counterClient.increase({ delta: 10 });
     const resp2 = await counterClient.increase({ delta: -2 });
@@ -59,6 +68,10 @@ async function main() {
 
     console.log(resp1, resp2);
     console.log('current', current);
+
+    const calculatedCounter = deltas.reduce((acc, delta) => acc + delta, 0);
+
+    console.log('calculated counter', calculatedCounter);
 
     const listeners_count = await counterClient.getListenersCount({});
     console.log('listeners count', listeners_count);

@@ -8,5 +8,10 @@
     ],
     "rust-analyzer.runnables.extraEnv": {
         "RUST_LOG": "debug"
+    },
+    "protoc": {
+        "options": [
+            "--proto_path=protos"
+        ]
     }
 }

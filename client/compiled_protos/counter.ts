@@ -7,6 +7,7 @@
 /* eslint-disable */
 import { type CallContext, type CallOptions } from "nice-grpc-common";
 import _m0 from "protobufjs/minimal.js";
+import { Range } from "./base.js";
 import { Empty } from "./google/protobuf/empty.js";
 
 export const protobufPackage = "counter";
@@ -15,13 +16,17 @@ export interface CounterDelta {
   delta: number;
 }
 
+export interface CounterState {
+  counter: number;
+}
+
 export interface CounterDeltaWithId {
   delta: number;
   id: number;
 }
 
-export interface CounterState {
-  counter: number;
+export interface Deltas {
+  deltas: number[];
 }
 
 export interface ListenersCount {
@@ -81,6 +86,63 @@ export const CounterDelta = {
   fromPartial(object: DeepPartial<CounterDelta>): CounterDelta {
     const message = createBaseCounterDelta();
     message.delta = object.delta ?? 0;
+    return message;
+  },
+};
+
+function createBaseCounterState(): CounterState {
+  return { counter: 0 };
+}
+
+export const CounterState = {
+  encode(message: CounterState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.counter !== 0) {
+      writer.uint32(8).int32(message.counter);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CounterState {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCounterState();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 8) {
+            break;
+          }
+
+          message.counter = reader.int32();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CounterState {
+    return { counter: isSet(object.counter) ? globalThis.Number(object.counter) : 0 };
+  },
+
+  toJSON(message: CounterState): unknown {
+    const obj: any = {};
+    if (message.counter !== 0) {
+      obj.counter = Math.round(message.counter);
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<CounterState>): CounterState {
+    return CounterState.fromPartial(base ?? {});
+  },
+  fromPartial(object: DeepPartial<CounterState>): CounterState {
+    const message = createBaseCounterState();
+    message.counter = object.counter ?? 0;
     return message;
   },
 };
@@ -159,32 +221,44 @@ export const CounterDeltaWithId = {
   },
 };
 
-function createBaseCounterState(): CounterState {
-  return { counter: 0 };
+function createBaseDeltas(): Deltas {
+  return { deltas: [] };
 }
 
-export const CounterState = {
-  encode(message: CounterState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.counter !== 0) {
-      writer.uint32(8).int32(message.counter);
+export const Deltas = {
+  encode(message: Deltas, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    writer.uint32(10).fork();
+    for (const v of message.deltas) {
+      writer.int32(v);
     }
+    writer.ldelim();
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CounterState {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deltas {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCounterState();
+    const message = createBaseDeltas();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
-            break;
+          if (tag === 8) {
+            message.deltas.push(reader.int32());
+
+            continue;
           }
 
-          message.counter = reader.int32();
-          continue;
+          if (tag === 10) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.deltas.push(reader.int32());
+            }
+
+            continue;
+          }
+
+          break;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -194,24 +268,26 @@ export const CounterState = {
     return message;
   },
 
-  fromJSON(object: any): CounterState {
-    return { counter: isSet(object.counter) ? globalThis.Number(object.counter) : 0 };
+  fromJSON(object: any): Deltas {
+    return {
+      deltas: globalThis.Array.isArray(object?.deltas) ? object.deltas.map((e: any) => globalThis.Number(e)) : [],
+    };
   },
 
-  toJSON(message: CounterState): unknown {
+  toJSON(message: Deltas): unknown {
     const obj: any = {};
-    if (message.counter !== 0) {
-      obj.counter = Math.round(message.counter);
+    if (message.deltas?.length) {
+      obj.deltas = message.deltas.map((e) => Math.round(e));
     }
     return obj;
   },
 
-  create(base?: DeepPartial<CounterState>): CounterState {
-    return CounterState.fromPartial(base ?? {});
+  create(base?: DeepPartial<Deltas>): Deltas {
+    return Deltas.fromPartial(base ?? {});
   },
-  fromPartial(object: DeepPartial<CounterState>): CounterState {
-    const message = createBaseCounterState();
-    message.counter = object.counter ?? 0;
+  fromPartial(object: DeepPartial<Deltas>): Deltas {
+    const message = createBaseDeltas();
+    message.deltas = object.deltas?.map((e) => e) || [];
     return message;
   },
 };
@@ -302,6 +378,14 @@ export const SingleCounterDefinition = {
       responseStream: true,
       options: {},
     },
+    getDeltas: {
+      name: "GetDeltas",
+      requestType: Range,
+      requestStream: false,
+      responseType: Deltas,
+      responseStream: false,
+      options: {},
+    },
     getListenersCount: {
       name: "GetListenersCount",
       requestType: Empty,
@@ -320,6 +404,7 @@ export interface SingleCounterServiceImplementation<CallContextExt = {}> {
     request: Empty,
     context: CallContext & CallContextExt,
   ): ServerStreamingMethodResult<DeepPartial<CounterDeltaWithId>>;
+  getDeltas(request: Range, context: CallContext & CallContextExt): Promise<DeepPartial<Deltas>>;
   getListenersCount(request: Empty, context: CallContext & CallContextExt): Promise<DeepPartial<ListenersCount>>;
 }
 
@@ -327,6 +412,7 @@ export interface SingleCounterClient<CallOptionsExt = {}> {
   increase(request: DeepPartial<CounterDelta>, options?: CallOptions & CallOptionsExt): Promise<CounterState>;
   current(request: DeepPartial<Empty>, options?: CallOptions & CallOptionsExt): Promise<CounterState>;
   listenDelta(request: DeepPartial<Empty>, options?: CallOptions & CallOptionsExt): AsyncIterable<CounterDeltaWithId>;
+  getDeltas(request: DeepPartial<Range>, options?: CallOptions & CallOptionsExt): Promise<Deltas>;
   getListenersCount(request: DeepPartial<Empty>, options?: CallOptions & CallOptionsExt): Promise<ListenersCount>;
 }
 

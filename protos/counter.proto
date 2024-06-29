@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+import "base.proto";
 
 package counter;
 
@@ -8,6 +9,7 @@ service SingleCounter {
     rpc Increase(CounterDelta) returns (CounterState);
     rpc Current(google.protobuf.Empty) returns (CounterState);
     rpc ListenDelta(google.protobuf.Empty) returns (stream CounterDeltaWithId);
+    rpc GetDeltas(base.Range) returns (Deltas);
     rpc GetListenersCount(google.protobuf.Empty) returns (ListenersCount);
 }
 
@@ -15,13 +17,17 @@ message CounterDelta {
     int32 delta = 1;
 }
 
+message CounterState {
+    int32 counter = 1;
+}
+
 message CounterDeltaWithId {
     int32 delta = 1;
     uint32 id = 2;
 }
 
-message CounterState {
-    int32 counter = 1;
+message Deltas {
+    repeated int32 deltas = 1;
 }
 
 message ListenersCount {
