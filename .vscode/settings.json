@@ -3,7 +3,8 @@
         "codegen",
         "prost",
         "proto",
-        "protos"
+        "protos",
+        "ractor"
     ],
     "rust-analyzer.runnables.extraEnv": {
         "RUST_LOG": "debug"
