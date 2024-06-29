@@ -5,12 +5,18 @@ import "google/protobuf/empty.proto";
 package counter;
 
 service SingleCounter {
-    rpc increase(CounterIncreaseRequest) returns (CounterState);
-    rpc current(google.protobuf.Empty) returns (CounterState);
+    rpc Increase(CounterDelta) returns (CounterState);
+    rpc Current(google.protobuf.Empty) returns (CounterState);
+    rpc ListenDelta(google.protobuf.Empty) returns (stream CounterDeltaWithId);
 }
 
-message CounterIncreaseRequest {
+message CounterDelta {
     int32 delta = 1;
+}
+
+message CounterDeltaWithId {
+    int32 delta = 1;
+    uint32 id = 2;
 }
 
 message CounterState {

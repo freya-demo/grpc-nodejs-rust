@@ -1,8 +1,17 @@
 use ractor::{Actor, ActorProcessingErr, ActorRef, MessagingErr, RpcReplyPort};
+use tokio::sync::broadcast;
 
-pub struct CounterActor;
+pub struct CounterActor {
+    pub event_tx: broadcast::Sender<Event>,
+}
+
+#[derive(Clone)]
+pub enum Event {
+    Update { id: u32, delta: i32 },
+}
 
 pub struct State {
+    id_counter: u32,
     counter: i32,
 }
 
@@ -12,8 +21,13 @@ pub enum Message {
 }
 
 impl State {
-    fn increase(&mut self, delta: i32) -> i32 {
+    fn increase(&mut self, actor: &CounterActor, delta: i32) -> i32 {
         self.counter += delta;
+        self.id_counter += 1;
+        let _ = actor.event_tx.send(Event::Update {
+            id: self.id_counter,
+            delta,
+        });
         self.counter
     }
 
@@ -33,7 +47,10 @@ impl Actor for CounterActor {
         _myself: ActorRef<Self::Msg>,
         _: (),
     ) -> Result<Self::State, ActorProcessingErr> {
-        Ok(State { counter: 0 })
+        Ok(State {
+            id_counter: 0,
+            counter: 0,
+        })
     }
 
     async fn handle(
@@ -48,13 +65,15 @@ impl Actor for CounterActor {
 
         match message {
             Message::Increase(delta, reply) => {
-                if let Err(err) = reply.send(state.increase(delta)) {
+                if let Err(err) = reply.send(state.increase(&self, delta)) {
                     log_err(err)
                 }
             }
-            Message::Retrieve(reply) => if let Err(err) = reply.send(state.retrieve()) {
-                log_err(err)
-            },
+            Message::Retrieve(reply) => {
+                if let Err(err) = reply.send(state.retrieve()) {
+                    log_err(err)
+                }
+            }
         };
 
         Ok(())

@@ -16,6 +16,7 @@ import {
   SingleCounterClient,
   SingleCounterDefinition,
 } from '../compiled_protos/counter.js';
+import { exit } from 'process';
 dotenv.config();
 
 export const sum = (a: number, b: number): number => {
@@ -44,10 +45,19 @@ async function main() {
       SingleCounterDefinition,
       channel,
     );
+
+    (async () => {
+      const stream = counterClient.listenDelta({});
+      for await (const item of stream) {
+        console.log('delta from stream', item);
+      }
+    })();
+
     const resp1 = await counterClient.increase({ delta: 10 });
     const resp2 = await counterClient.increase({ delta: -2 });
     const current = await counterClient.current({});
     console.log(resp1, resp2, current);
+    exit();
   }
 }
 
