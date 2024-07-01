@@ -41,15 +41,7 @@ impl SingleCounterService {
             (),
         )
         .await
-        .map(|actor| {
-            (
-                Self {
-                    actor: actor.0,
-                    event_tx,
-                },
-                actor.1,
-            )
-        })
+        .map(|(actor, join_handle)| (Self { actor, event_tx }, join_handle))
     }
 }
 

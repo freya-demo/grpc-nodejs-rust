@@ -20,8 +20,8 @@ pub struct DemoList {
 /// Generated client implementations.
 pub mod hello_world_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct HelloWorldClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -65,9 +65,8 @@ pub mod hello_world_client {
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
+                Into<StdError> + Send + Sync,
         {
             HelloWorldClient::new(InterceptedService::new(inner, interceptor))
         }
@@ -105,23 +104,16 @@ pub mod hello_world_client {
         pub async fn hello_world(
             &mut self,
             request: impl tonic::IntoRequest<super::HelloWorldRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::HelloWorldResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+        ) -> std::result::Result<tonic::Response<super::HelloWorldResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/hello_world.HelloWorld/HelloWorld",
-            );
+            let path = http::uri::PathAndQuery::from_static("/hello_world.HelloWorld/HelloWorld");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("hello_world.HelloWorld", "HelloWorld"));
@@ -131,19 +123,14 @@ pub mod hello_world_client {
             &mut self,
             request: impl tonic::IntoRequest<super::DemoList>,
         ) -> std::result::Result<tonic::Response<super::DemoList>, tonic::Status> {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/hello_world.HelloWorld/EchoList",
-            );
+            let path = http::uri::PathAndQuery::from_static("/hello_world.HelloWorld/EchoList");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("hello_world.HelloWorld", "EchoList"));
@@ -161,10 +148,7 @@ pub mod hello_world_server {
         async fn hello_world(
             &self,
             request: tonic::Request<super::HelloWorldRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::HelloWorldResponse>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<super::HelloWorldResponse>, tonic::Status>;
         async fn echo_list(
             &self,
             request: tonic::Request<super::DemoList>,
@@ -193,10 +177,7 @@ pub mod hello_world_server {
                 max_encoding_message_size: None,
             }
         }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
             F: tonic::service::Interceptor,
         {
@@ -252,15 +233,9 @@ pub mod hello_world_server {
                 "/hello_world.HelloWorld/HelloWorld" => {
                     #[allow(non_camel_case_types)]
                     struct HelloWorldSvc<T: HelloWorld>(pub Arc<T>);
-                    impl<
-                        T: HelloWorld,
-                    > tonic::server::UnaryService<super::HelloWorldRequest>
-                    for HelloWorldSvc<T> {
+                    impl<T: HelloWorld> tonic::server::UnaryService<super::HelloWorldRequest> for HelloWorldSvc<T> {
                         type Response = super::HelloWorldResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::HelloWorldRequest>,
@@ -298,21 +273,16 @@ pub mod hello_world_server {
                 "/hello_world.HelloWorld/EchoList" => {
                     #[allow(non_camel_case_types)]
                     struct EchoListSvc<T: HelloWorld>(pub Arc<T>);
-                    impl<T: HelloWorld> tonic::server::UnaryService<super::DemoList>
-                    for EchoListSvc<T> {
+                    impl<T: HelloWorld> tonic::server::UnaryService<super::DemoList> for EchoListSvc<T> {
                         type Response = super::DemoList;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::DemoList>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as HelloWorld>::echo_list(&inner, request).await
-                            };
+                            let fut =
+                                async move { <T as HelloWorld>::echo_list(&inner, request).await };
                             Box::pin(fut)
                         }
                     }
@@ -339,18 +309,14 @@ pub mod hello_world_server {
                     };
                     Box::pin(fut)
                 }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(empty_body())
+                        .unwrap())
+                }),
             }
         }
     }

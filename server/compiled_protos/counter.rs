@@ -34,8 +34,8 @@ pub struct ListenersCount {
 /// Generated client implementations.
 pub mod single_counter_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct SingleCounterClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -79,9 +79,8 @@ pub mod single_counter_client {
                     <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
                 >,
             >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
+                Into<StdError> + Send + Sync,
         {
             SingleCounterClient::new(InterceptedService::new(inner, interceptor))
         }
@@ -120,19 +119,14 @@ pub mod single_counter_client {
             &mut self,
             request: impl tonic::IntoRequest<super::CounterDelta>,
         ) -> std::result::Result<tonic::Response<super::CounterState>, tonic::Status> {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/counter.SingleCounter/Increase",
-            );
+            let path = http::uri::PathAndQuery::from_static("/counter.SingleCounter/Increase");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("counter.SingleCounter", "Increase"));
@@ -142,19 +136,14 @@ pub mod single_counter_client {
             &mut self,
             request: impl tonic::IntoRequest<()>,
         ) -> std::result::Result<tonic::Response<super::CounterState>, tonic::Status> {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/counter.SingleCounter/Current",
-            );
+            let path = http::uri::PathAndQuery::from_static("/counter.SingleCounter/Current");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("counter.SingleCounter", "Current"));
@@ -167,19 +156,14 @@ pub mod single_counter_client {
             tonic::Response<tonic::codec::Streaming<super::CounterDeltaWithId>>,
             tonic::Status,
         > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/counter.SingleCounter/ListenDelta",
-            );
+            let path = http::uri::PathAndQuery::from_static("/counter.SingleCounter/ListenDelta");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("counter.SingleCounter", "ListenDelta"));
@@ -189,19 +173,14 @@ pub mod single_counter_client {
             &mut self,
             request: impl tonic::IntoRequest<super::super::base::Range>,
         ) -> std::result::Result<tonic::Response<super::Deltas>, tonic::Status> {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/counter.SingleCounter/GetDeltas",
-            );
+            let path = http::uri::PathAndQuery::from_static("/counter.SingleCounter/GetDeltas");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("counter.SingleCounter", "GetDeltas"));
@@ -211,22 +190,20 @@ pub mod single_counter_client {
             &mut self,
             request: impl tonic::IntoRequest<()>,
         ) -> std::result::Result<tonic::Response<super::ListenersCount>, tonic::Status> {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/counter.SingleCounter/GetListenersCount",
-            );
+            let path =
+                http::uri::PathAndQuery::from_static("/counter.SingleCounter/GetListenersCount");
             let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("counter.SingleCounter", "GetListenersCount"));
+            req.extensions_mut().insert(GrpcMethod::new(
+                "counter.SingleCounter",
+                "GetListenersCount",
+            ));
             self.inner.unary(req, path, codec).await
         }
     }
@@ -249,16 +226,12 @@ pub mod single_counter_server {
         /// Server streaming response type for the ListenDelta method.
         type ListenDeltaStream: tonic::codegen::tokio_stream::Stream<
                 Item = std::result::Result<super::CounterDeltaWithId, tonic::Status>,
-            >
-            + Send
+            > + Send
             + 'static;
         async fn listen_delta(
             &self,
             request: tonic::Request<()>,
-        ) -> std::result::Result<
-            tonic::Response<Self::ListenDeltaStream>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<Self::ListenDeltaStream>, tonic::Status>;
         async fn get_deltas(
             &self,
             request: tonic::Request<super::super::base::Range>,
@@ -291,10 +264,7 @@ pub mod single_counter_server {
                 max_encoding_message_size: None,
             }
         }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
             F: tonic::service::Interceptor,
         {
@@ -350,15 +320,9 @@ pub mod single_counter_server {
                 "/counter.SingleCounter/Increase" => {
                     #[allow(non_camel_case_types)]
                     struct IncreaseSvc<T: SingleCounter>(pub Arc<T>);
-                    impl<
-                        T: SingleCounter,
-                    > tonic::server::UnaryService<super::CounterDelta>
-                    for IncreaseSvc<T> {
+                    impl<T: SingleCounter> tonic::server::UnaryService<super::CounterDelta> for IncreaseSvc<T> {
                         type Response = super::CounterState;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::CounterDelta>,
@@ -396,18 +360,13 @@ pub mod single_counter_server {
                 "/counter.SingleCounter/Current" => {
                     #[allow(non_camel_case_types)]
                     struct CurrentSvc<T: SingleCounter>(pub Arc<T>);
-                    impl<T: SingleCounter> tonic::server::UnaryService<()>
-                    for CurrentSvc<T> {
+                    impl<T: SingleCounter> tonic::server::UnaryService<()> for CurrentSvc<T> {
                         type Response = super::CounterState;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(&mut self, request: tonic::Request<()>) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as SingleCounter>::current(&inner, request).await
-                            };
+                            let fut =
+                                async move { <T as SingleCounter>::current(&inner, request).await };
                             Box::pin(fut)
                         }
                     }
@@ -437,14 +396,11 @@ pub mod single_counter_server {
                 "/counter.SingleCounter/ListenDelta" => {
                     #[allow(non_camel_case_types)]
                     struct ListenDeltaSvc<T: SingleCounter>(pub Arc<T>);
-                    impl<T: SingleCounter> tonic::server::ServerStreamingService<()>
-                    for ListenDeltaSvc<T> {
+                    impl<T: SingleCounter> tonic::server::ServerStreamingService<()> for ListenDeltaSvc<T> {
                         type Response = super::CounterDeltaWithId;
                         type ResponseStream = T::ListenDeltaStream;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::ResponseStream>,
-                            tonic::Status,
-                        >;
+                        type Future =
+                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
                         fn call(&mut self, request: tonic::Request<()>) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
@@ -479,15 +435,9 @@ pub mod single_counter_server {
                 "/counter.SingleCounter/GetDeltas" => {
                     #[allow(non_camel_case_types)]
                     struct GetDeltasSvc<T: SingleCounter>(pub Arc<T>);
-                    impl<
-                        T: SingleCounter,
-                    > tonic::server::UnaryService<super::super::base::Range>
-                    for GetDeltasSvc<T> {
+                    impl<T: SingleCounter> tonic::server::UnaryService<super::super::base::Range> for GetDeltasSvc<T> {
                         type Response = super::Deltas;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::super::base::Range>,
@@ -525,18 +475,13 @@ pub mod single_counter_server {
                 "/counter.SingleCounter/GetListenersCount" => {
                     #[allow(non_camel_case_types)]
                     struct GetListenersCountSvc<T: SingleCounter>(pub Arc<T>);
-                    impl<T: SingleCounter> tonic::server::UnaryService<()>
-                    for GetListenersCountSvc<T> {
+                    impl<T: SingleCounter> tonic::server::UnaryService<()> for GetListenersCountSvc<T> {
                         type Response = super::ListenersCount;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(&mut self, request: tonic::Request<()>) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
-                                <T as SingleCounter>::get_listeners_count(&inner, request)
-                                    .await
+                                <T as SingleCounter>::get_listeners_count(&inner, request).await
                             };
                             Box::pin(fut)
                         }
@@ -564,18 +509,14 @@ pub mod single_counter_server {
                     };
                     Box::pin(fut)
                 }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(empty_body())
+                        .unwrap())
+                }),
             }
         }
     }
